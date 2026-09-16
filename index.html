@@ -4191,6 +4191,28 @@ input:checked + .slider:before {
     </div>
   </div>
 </div>
+
+   <!-- 数据导入导出弹窗 -->
+<div class="modal-mask center" id="modal-data-io">
+  <div class="modal modal-center" data-stop>
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="data-io-title">导出数据</div>
+    <div class="form-group">
+      <label class="form-label" id="data-io-hint">提示</label>
+      <textarea class="form-textarea selectable-text" id="data-io-text" rows="8" readonly></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('modal-data-io')">取消</button>
+      <button class="btn btn-primary" id="data-io-confirm" style="display:none;">确定导入</button>
+    </div>
+  </div>
+</div>
+
+<!-- 在“清除本地数据”按钮旁边，加上导入导出的触发按钮 -->
+<div style="margin-top:8px;display:flex;gap:8px;justify-content:center;">
+  <button id="btn-export-data" style="background:transparent;border:none;color:var(--text-secondary);font-size:11px;cursor:pointer;text-decoration:underline;">导出备份</button>
+  <button id="btn-import-data" style="background:transparent;border:none;color:var(--text-secondary);font-size:11px;cursor:pointer;text-decoration:underline;">导入数据</button>
+</div>
    
 
 <!-- ============ 弹窗：上传作品 ============ -->
