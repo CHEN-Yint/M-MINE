@@ -1,26 +1,45 @@
-M-MINE | AI-powered interactive photo album
+M·MINE
+> A local-first interactive album experiment.  
+> v1.3 “AI friends” are local template simulations, not a real LLM.  
+> Data stays in your browser by default; photos do not leave your device.
 
-A judgment-free private space. Upload photos, and AI friends will automatically comment and like.
+Status
+- v1.3, pure front-end, no backend, GitHub Pages
+- Positioning: local AI-simulated album / proof of concept
 
-Latest Features (v1.3)
-- Multi-Theme System: Supports Classic Minimal, Pixel Retro, Magazine Editorial, and SPECIAL (Stardew-inspired) styles, with customizable theme palettes.
-- AI Interaction: Built-in AI friend system (customizable name, avatar, personality, and tone variants). They generate unique comments based on photo categories and keywords (or a "secret note to friends"). Supports replying to AI comments.
-- AI Comment Controls: Add a "secret note to friends" to guide comment topics, or turn off AI comments entirely when publishing.
-- Music Player: Integrated NetEase Cloud Music and Spotify players in the profile. Supports tracks, playlists, and albums.
-- Location Support: Manually add a location or use geolocation. Resolved via OpenStreetMap Nominatim and displayed on the work detail page.
-- Performance & Storage: Uses IndexedDB for large data (works, drafts) with automatic migration from localStorage. Images are compressed via Canvas (max 1000px, JPEG quality 0.7) before saving.
-- Enhanced Detail Page: Comments are collapsed by default and expand on click. Optimized desktop two-column layout ensures images are fully displayed without cropping.
-<img width="680" height="360" alt="ezgif com-resize" src="https://github.com/user-attachments/assets/e174d947-75fb-48e3-ab47-4ced9a78e11e" />
+What Works
+- Upload up to 9 images, Canvas compression, 3:4 / 1:1 ratios
+- Gallery: 1 / 2 / 3 columns, collect filter, detail page
+- Likes, collect, comments, replies, drafts
+- Local AI friends: 6 defaults, editable, traits, local template comments
+- Music: NetEase / Spotify iframe
+- Location: Geolocation + OpenStreetMap Nominatim
+- Themes: Classic / Pixel / Magazine / Special (Stardew tribute)
+- Storage: IndexedDB + localStorage, import/export JSON, reset
 
-Tech Stack
-- Vanilla HTML / CSS / JavaScript
-- Local Data Storage (IndexedDB + localStorage migration)
-- Canvas-based image compression
-- Deployed via GitHub Pages
+Not Implemented / Limits
+- No real AI: comments are local templates + keyword matching + random
+- No 30-minute freeze
+- No full “judgment-free”: like counts are still visible
+- No account system, no cloud sync
+- No privacy policy / terms yet
+- Weak engineering: legacy files may exist, no tests
+
+Privacy
+- Photos and data stay local by default
+- Location sends coordinates to OpenStreetMap Nominatim
+- Music embeds third-party iframes
+- Future real AI / cloud sync will update this notice
 
 Roadmap
-- Integrate Supabase for cloud data synchronization
-- Integrate Multimodal AI for smarter, real AI interactions
-- Support more dynamic theme effects
-- Add real AI comment API as an optional backend
+- P0: honest labeling, privacy notice
+- P1: real multimodal LLM via backend proxy, optional Supabase cloud sync, real 30-minute freeze
+- P2: clean repo, tests, growth, light monetization
 
+Credits
+Stardew Valley theme is a fan tribute, not affiliated with ConcernedApe LLC.  
+Stardew Valley © ConcernedApe.
+
+Disclaimer
+v1.3 is a local simulation.  
+Roadmap items are not implemented yet.
