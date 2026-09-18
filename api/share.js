@@ -1,39 +1,42 @@
-import { kv } from '@vercel/kv';
+export async function onRequestPost(context) {
+  try {
+    const { request, env } = context;
+    const body = await request.json();
+    const { data, ttlHours = 24 } = body || {};
+    if (!data) return new Response(JSON.stringify({ error: '缺少数据' }), { status: 400, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
 
-export default async function handler(req, res) {
-	res.setHeader('Access-Control-Allow-Origin', '*');
-	res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-	res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-	if (req.method === 'OPTIONS') return res.status(200).end();
+    const id = Math.random().toString(36).slice(2, 10);
+    await env.KV.put(`share:${id}`, JSON.stringify(data), { expirationTtl: ttlHours * 3600 });
 
-	// ---------- 生成分享 ----------
-	if (req.method === 'POST') {
-		const { data, burn = false, ttlHours = 24 } = req.body || {};
-		if (!data) return res.status(400).json({ error: '缺少数据' });
+    return new Response(JSON.stringify({ id, expiresInHours: ttlHours }), {
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+    });
+  } catch (e) {
+    return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+  }
+}
 
-		const id = Math.random().toString(36).slice(2, 10);
+export async function onRequestGet(context) {
+  try {
+    const { request, env } = context;
+    const url = new URL(request.url);
+    const id = url.searchParams.get('id');
+    const burn = url.searchParams.get('burn');
+    if (!id) return new Response(JSON.stringify({ error: '缺少 id' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
 
-		// 存入 Vercel KV，设置过期时间（默认24小时）
-		await kv.set(`share:${id}`, JSON.stringify(data), { ex: ttlHours * 3600 });
+    const raw = await env.KV.get(`share:${id}`);
+    if (!raw) return new Response(JSON.stringify({ error: '链接已过期或被查看过' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
 
-		return res.json({ id, expiresInHours: ttlHours });
-	}
+    if (burn === '1') await env.KV.delete(`share:${id}`);
 
-	// ---------- 读取分享 ----------
-	if (req.method === 'GET') {
-		const { id, burn } = req.query;
-		if (!id) return res.status(400).json({ error: '缺少 id' });
+    return new Response(JSON.stringify({ data: JSON.parse(raw) }), {
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+    });
+  } catch (e) {
+    return new Response(JSON.stringify({ error: e.message }), { status: 500, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+  }
+}
 
-		const raw = await kv.get(`share:${id}`);
-		if (!raw) return res.status(404).json({ error: '链接已过期或被查看过' });
-
-		// ★ 阅后即焚核心逻辑：读取后立刻删除
-		if (burn === '1') {
-			await kv.del(`share:${id}`);
-		}
-
-		return res.json({ data: JSON.parse(raw) });
-	}
-
-	return res.status(405).json({ error: 'Method Not Allowed' });
+export async function onRequestOptions() {
+  return new Response(null, { status: 200, headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET,POST,OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type' } });
 }
