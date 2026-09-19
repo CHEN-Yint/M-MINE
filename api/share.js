@@ -7,14 +7,14 @@ export default {
       'Access-Control-Allow-Headers': 'Content-Type'
     };
 
-    // 处理跨域预检
+    // 1. 处理跨域预检
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 200, headers: corsHeaders });
     }
 
-    // 路由：匹配 /api/share
+    // 2. 路由：处理 /api/share 请求
     if (url.pathname === '/api/share') {
-      // ---------- 生成分享 (POST) ----------
+      // 生成分享 (POST)
       if (request.method === 'POST') {
         try {
           const body = await request.json();
@@ -32,7 +32,7 @@ export default {
         }
       }
 
-      // ---------- 读取分享 (GET) ----------
+      // 读取分享 (GET)
       if (request.method === 'GET') {
         try {
           const id = url.searchParams.get('id');
@@ -42,7 +42,7 @@ export default {
           const raw = await env.KV.get(`share:${id}`);
           if (!raw) return new Response(JSON.stringify({ error: '链接已过期或被查看过' }), { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 
-          // ★ 阅后即焚逻辑
+          // 阅后即焚
           if (burn === '1') await env.KV.delete(`share:${id}`);
 
           return new Response(JSON.stringify({ data: JSON.parse(raw) }), { 
@@ -54,6 +54,7 @@ export default {
       }
     }
 
-    return new Response('Not Found', { status: 404, headers: corsHeaders });
+    // 3. 其他所有请求（app.js, index.html 等）交给前端静态文件处理
+    return env.ASSETS.fetch(request);
   }
 }
