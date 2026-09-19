@@ -1611,7 +1611,7 @@ async function generateShareLink(options = {}) {
   const payload = {
     u: { username: user.username, bio: user.bio, avatar: user.avatar },
     w: appData.works,
-    t: appData.theme
+    t: appData.theme,
     s: localStorage.getItem('mmine_style') || 'default'
   };
 
