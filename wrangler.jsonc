@@ -1,9 +1,15 @@
 {
   "name": "m-mine",
   "main": "api/share.js",
-  "compatibility_date": "2026-09-18",
+  "compatibility_date": "2026-09-19",
   "assets": {
     "directory": ".",
     "binding": "ASSETS"
-  }
+  },
+  "kv_namespaces": [
+    {
+      "binding": "KV",
+      "id": "你的KV空间ID"
+    }
+  ]
 }
