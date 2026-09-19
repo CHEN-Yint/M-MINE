@@ -60,13 +60,13 @@ As a pure front-end app with no account system or cloud sync, all data (photos, 
 - **Sharing Backend:** Cloudflare Worker + KV storage (optional, for burn-after-reading sharing).
 
 ```text
-63  ├── index.html          # Main page
-64  ├── app.js              # Front-end logic
-65  ├── api/
-66  │   └── share.js        # Cloudflare Worker entry (handles sharing API)
-67  ├── wrangler.jsonc      # Cloudflare Worker configuration (optional)
-68  └── assets/             # Fonts, images, and other static assets
-69  ```
+├── index.html          # Main page
+├── app.js              # Front-end logic
+├── api/
+│   └── share.js        # Cloudflare Worker entry (handles sharing API)
+├── wrangler.jsonc      # Cloudflare Worker configuration (optional)
+└── assets/             # Fonts, images, and other static assets
+```
 
 ---
 
