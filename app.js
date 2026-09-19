@@ -2563,6 +2563,15 @@ styleBtns.forEach(btn => {
   });
 });
 
+const isGitHubPages = location.hostname.includes('github.io');
+  const shareBtn = document.getElementById('btn-share');
+
+  if (isGitHubPages) {
+    // 在 GitHub Pages 上，隐藏分享按钮（因为没后端，点了会报错）
+    if (shareBtn) shareBtn.style.display = 'none';
+  }
+  // 其他所有域名（Cloudflare Worker、未来绑定的自定义域名），都会自动保留分享按钮
+	
     // 同步绑定所有事件（事件绑定不依赖数据）
   bindAvatarInput();
   bindStatClicks();
